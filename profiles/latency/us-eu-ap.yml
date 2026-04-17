@@ -1,0 +1,24 @@
+name: us-eu-ap
+links:
+  us-east:
+    eu-west:
+      delay_ms: 80
+      jitter_ms: 10
+    ap-south:
+      delay_ms: 150
+      jitter_ms: 20
+  eu-west:
+    us-east:
+      delay_ms: 80
+      jitter_ms: 10
+    ap-south:
+      delay_ms: 140
+      jitter_ms: 15
+  ap-south:
+    us-east:
+      delay_ms: 150
+      jitter_ms: 20
+    eu-west:
+      delay_ms: 140
+      jitter_ms: 15
+

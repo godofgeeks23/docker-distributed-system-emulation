@@ -1,0 +1,148 @@
+name: dslab
+
+services:
+  router-us-east:
+    build:
+      context: ..
+      dockerfile: docker/router/Dockerfile
+    cap_add:
+      - NET_ADMIN
+    sysctls:
+      net.ipv4.ip_forward: "1"
+    environment:
+      REGION: us-east
+      LAN_IP: 10.10.1.254
+      BACKBONE_IP: 10.255.0.1
+      REMOTE_ROUTES: 10.10.2.0/24:10.255.0.2,10.10.3.0/24:10.255.0.3
+    networks:
+      us-east-lan:
+        ipv4_address: 10.10.1.254
+      backbone:
+        ipv4_address: 10.255.0.1
+
+  router-eu-west:
+    build:
+      context: ..
+      dockerfile: docker/router/Dockerfile
+    cap_add:
+      - NET_ADMIN
+    sysctls:
+      net.ipv4.ip_forward: "1"
+    environment:
+      REGION: eu-west
+      LAN_IP: 10.10.2.254
+      BACKBONE_IP: 10.255.0.2
+      REMOTE_ROUTES: 10.10.1.0/24:10.255.0.1,10.10.3.0/24:10.255.0.3
+    networks:
+      eu-west-lan:
+        ipv4_address: 10.10.2.254
+      backbone:
+        ipv4_address: 10.255.0.2
+
+  router-ap-south:
+    build:
+      context: ..
+      dockerfile: docker/router/Dockerfile
+    cap_add:
+      - NET_ADMIN
+    sysctls:
+      net.ipv4.ip_forward: "1"
+    environment:
+      REGION: ap-south
+      LAN_IP: 10.10.3.254
+      BACKBONE_IP: 10.255.0.3
+      REMOTE_ROUTES: 10.10.1.0/24:10.255.0.1,10.10.2.0/24:10.255.0.2
+    networks:
+      ap-south-lan:
+        ipv4_address: 10.10.3.254
+      backbone:
+        ipv4_address: 10.255.0.3
+
+  probe-us-east:
+    build:
+      context: ..
+      dockerfile: docker/probe/Dockerfile
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    environment:
+      REGION: us-east
+      NODE_IP: 10.10.1.10
+      ROUTER_IP: 10.10.1.254
+      REMOTE_SUBNETS: 10.10.2.0/24,10.10.3.0/24
+      PORT: "8080"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8080/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    networks:
+      us-east-lan:
+        ipv4_address: 10.10.1.10
+
+  probe-eu-west:
+    build:
+      context: ..
+      dockerfile: docker/probe/Dockerfile
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    environment:
+      REGION: eu-west
+      NODE_IP: 10.10.2.10
+      ROUTER_IP: 10.10.2.254
+      REMOTE_SUBNETS: 10.10.1.0/24,10.10.3.0/24
+      PORT: "8080"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8080/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    networks:
+      eu-west-lan:
+        ipv4_address: 10.10.2.10
+
+  probe-ap-south:
+    build:
+      context: ..
+      dockerfile: docker/probe/Dockerfile
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    environment:
+      REGION: ap-south
+      NODE_IP: 10.10.3.10
+      ROUTER_IP: 10.10.3.254
+      REMOTE_SUBNETS: 10.10.1.0/24,10.10.2.0/24
+      PORT: "8080"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8080/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    networks:
+      ap-south-lan:
+        ipv4_address: 10.10.3.10
+
+networks:
+  us-east-lan:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.10.1.0/24
+  eu-west-lan:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.10.2.0/24
+  ap-south-lan:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.10.3.0/24
+  backbone:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.255.0.0/24
+

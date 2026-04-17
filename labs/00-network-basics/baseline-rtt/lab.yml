@@ -1,0 +1,8 @@
+name: baseline-rtt
+type: ping-matrix
+regions:
+  - us-east
+  - eu-west
+  - ap-south
+count: 4
+
