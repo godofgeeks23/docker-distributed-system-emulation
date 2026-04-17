@@ -12,13 +12,13 @@ services:
     environment:
       REGION: us-east
       LAN_IP: 10.10.1.254
-      BACKBONE_IP: 10.255.0.1
-      REMOTE_ROUTES: 10.10.2.0/24:10.255.0.2,10.10.3.0/24:10.255.0.3
+      BACKBONE_IP: 10.255.0.254
+      REMOTE_ROUTES: 10.10.2.0/24:10.255.0.253,10.10.3.0/24:10.255.0.252
     networks:
       us-east-lan:
         ipv4_address: 10.10.1.254
       backbone:
-        ipv4_address: 10.255.0.1
+        ipv4_address: 10.255.0.254
 
   router-eu-west:
     build:
@@ -31,13 +31,13 @@ services:
     environment:
       REGION: eu-west
       LAN_IP: 10.10.2.254
-      BACKBONE_IP: 10.255.0.2
-      REMOTE_ROUTES: 10.10.1.0/24:10.255.0.1,10.10.3.0/24:10.255.0.3
+      BACKBONE_IP: 10.255.0.253
+      REMOTE_ROUTES: 10.10.1.0/24:10.255.0.254,10.10.3.0/24:10.255.0.252
     networks:
       eu-west-lan:
         ipv4_address: 10.10.2.254
       backbone:
-        ipv4_address: 10.255.0.2
+        ipv4_address: 10.255.0.253
 
   router-ap-south:
     build:
@@ -50,13 +50,13 @@ services:
     environment:
       REGION: ap-south
       LAN_IP: 10.10.3.254
-      BACKBONE_IP: 10.255.0.3
-      REMOTE_ROUTES: 10.10.1.0/24:10.255.0.1,10.10.2.0/24:10.255.0.2
+      BACKBONE_IP: 10.255.0.252
+      REMOTE_ROUTES: 10.10.1.0/24:10.255.0.254,10.10.2.0/24:10.255.0.253
     networks:
       ap-south-lan:
         ipv4_address: 10.10.3.254
       backbone:
-        ipv4_address: 10.255.0.3
+        ipv4_address: 10.255.0.252
 
   probe-us-east:
     build:
@@ -145,4 +145,3 @@ networks:
     ipam:
       config:
         - subnet: 10.255.0.0/24
-
