@@ -12,7 +12,7 @@ The goal is not to fake "real cloud regions." The goal is to make distributed sy
 - quorum behavior and consensus failure modes
 - sharding, rebalancing, retries, backpressure, and convergence
 
-The recommended architecture is documented in [docs/architecture.md](/media/godofgeeks/Baksa11/Aviral/Coding/docker-distributed-system-emulation/docs/architecture.md) and the lab catalog in [docs/lab-catalog.md](/media/godofgeeks/Baksa11/Aviral/Coding/docker-distributed-system-emulation/docs/lab-catalog.md).
+The recommended architecture is documented in [docs/architecture.md](./docs/architecture.md) and the lab catalog in [docs/lab-catalog.md](./docs/lab-catalog.md).
 
 ## Phase 1 Scaffold
 
