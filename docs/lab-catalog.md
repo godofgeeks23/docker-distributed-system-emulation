@@ -2,7 +2,28 @@
 
 This is the recommended lab inventory for the project. Not every lab should be implemented first. The goal is to design a catalog broad enough to support progressive learning.
 
+## Catalog Map
+
+```mermaid
+flowchart TD
+  A["00 Network Foundations"] --> B["10 Replication and Eventual Consistency"]
+  B --> C["20 Consensus and Coordination"]
+  C --> D["30 Sharding, Placement, and Rebalancing"]
+  D --> E["40 Transactions, Ordering, and Delivery"]
+  E --> F["50 Failure Detection, Recovery, and Resilience"]
+  F --> G["60 Gossip, Membership, and Repair"]
+  G --> H["70 Database-System-Specific Labs"]
+  H --> I["80 Observability and Measurement"]
+  I --> J["90 Lower-Fidelity or Stretch Labs"]
+```
+
 ## How to Read This List
+
+```mermaid
+flowchart LR
+  T1["Tier 1<br/>validate platform early"] --> T2["Tier 2<br/>extend once stable"]
+  T2 --> T3["Tier 3<br/>advanced or lower-fidelity"]
+```
 
 - `Tier 1`: should exist early because they validate the platform and teach core concepts.
 - `Tier 2`: good next labs once the platform is stable.
@@ -197,6 +218,19 @@ These are useful, but should be labeled clearly because Docker-on-one-host is a 
 85. `Tier 3` Byzantine behavior
 
 ## Best Initial Labs
+
+```mermaid
+flowchart TD
+  A["Baseline RTT"] --> B["Fixed latency vs jitter"]
+  B --> C["Async primary-replica lag"]
+  C --> D["Read-your-writes violation"]
+  D --> E["Leader election under WAN latency"]
+  E --> F["Majority vs minority partition"]
+  F --> G["Crash-stop node failure"]
+  G --> H["Slow node"]
+  H --> I["Retry storm"]
+  I --> J["Convergence time measurement"]
+```
 
 If you want the smallest high-value starting set, implement these first:
 

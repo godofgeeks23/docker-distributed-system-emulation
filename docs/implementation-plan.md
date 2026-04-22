@@ -4,7 +4,27 @@
 
 Build a local lab platform that can run repeatable distributed systems experiments on one machine, with room to add many labs later without rewriting the core.
 
+## Roadmap Overview
+
+```mermaid
+flowchart LR
+  P1["Phase 1<br/>Platform Skeleton"] --> P2["Phase 2<br/>First Educational Service"]
+  P2 --> P3["Phase 3<br/>Lab Runtime"]
+  P3 --> P4["Phase 4<br/>Tier 1 Labs"]
+  P4 --> P5["Phase 5<br/>Real Distributed Systems"]
+  P5 --> P6["Phase 6<br/>Tier 2 Labs"]
+  P6 --> P7["Phase 7<br/>Stretch Areas"]
+```
+
 ## Principles
+
+```mermaid
+flowchart TD
+  A["Build reusable platform first"] --> B["Keep labs declarative"]
+  B --> C["Start with lightweight systems"]
+  C --> D["Make reset + observability mandatory"]
+  D --> E["Separate topology, faults, workloads, assertions"]
+```
 
 - build the platform before adding many systems
 - keep labs declarative
@@ -13,6 +33,15 @@ Build a local lab platform that can run repeatable distributed systems experimen
 - separate topology, faults, workloads, and assertions
 
 ## Phase 1: Platform Skeleton
+
+```mermaid
+flowchart LR
+  A["Compose topology"] --> B["Routers + backbone"]
+  B --> C["Controller CLI"]
+  C --> D["Latency profiles"]
+  D --> E["Reset logic"]
+  E --> F["RTT validation lab"]
+```
 
 Objective:
 
@@ -35,6 +64,17 @@ Success criteria:
 - measured RTT matches the configured profile closely enough
 
 ## Phase 2: First Educational Service
+
+```mermaid
+flowchart TD
+  A["Simple HTTP KV service"] --> B["Replication modes"]
+  B --> C["leader-follower async"]
+  B --> D["leader-follower sync"]
+  B --> E["multi-primary with conflict logging"]
+  C --> F["Expose stale reads and catch-up"]
+  D --> F
+  E --> F
+```
 
 Objective:
 
@@ -66,6 +106,14 @@ Success criteria:
 - learners can inspect state per node directly
 
 ## Phase 3: Lab Runtime
+
+```mermaid
+flowchart LR
+  A["lab.yml schema"] --> B["Scenario runner"]
+  B --> C["Workload driver"]
+  C --> D["Assertion engine"]
+  D --> E["Timeline events + artifacts"]
+```
 
 Objective:
 
@@ -107,6 +155,11 @@ Success criteria:
 - each lab exposes at least one quantitative metric
 
 ## Phase 5: Real Distributed Systems
+
+```mermaid
+flowchart LR
+  A["etcd"] --> B["Redis"] --> C["Cassandra"] --> D["CockroachDB"]
+```
 
 Add real systems after the platform proves stable.
 
@@ -196,6 +249,15 @@ Mitigation:
 - fail a lab if critical metrics are unavailable
 
 ## Recommended Milestone Plan
+
+```mermaid
+flowchart TD
+  M1["Milestone 1<br/>topology + routers + profiles + RTT"] --> M2["Milestone 2<br/>custom KV + stale-read labs"]
+  M2 --> M3["Milestone 3<br/>runtime + scenario manifests"]
+  M3 --> M4["Milestone 4<br/>etcd labs"]
+  M4 --> M5["Milestone 5<br/>Redis labs"]
+  M5 --> M6["Milestone 6<br/>Cassandra / CockroachDB if justified"]
+```
 
 ### Milestone 1
 

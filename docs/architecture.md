@@ -1,5 +1,43 @@
 # Architecture
 
+## At a Glance
+
+```mermaid
+flowchart LR
+  subgraph USE["Region: us-east LAN"]
+    PU["probe / app node"]
+    RU["router-us-east"]
+    PU --> RU
+  end
+
+  subgraph EUW["Region: eu-west LAN"]
+    PE["probe / app node"]
+    RE["router-eu-west"]
+    PE --> RE
+  end
+
+  subgraph APS["Region: ap-south LAN"]
+    PA["probe / app node"]
+    RA["router-ap-south"]
+    PA --> RA
+  end
+
+  subgraph WAN["WAN / Backbone"]
+    RU <-->|"tc/netem, iptables"| RE
+    RE <-->|"tc/netem, iptables"| RA
+    RU <-->|"tc/netem, iptables"| RA
+  end
+
+  OBS["Prometheus / Grafana / Logs"]
+
+  PU -. metrics .-> OBS
+  PE -. metrics .-> OBS
+  PA -. metrics .-> OBS
+  RU -. router metrics/events .-> OBS
+  RE -. router metrics/events .-> OBS
+  RA -. router metrics/events .-> OBS
+```
+
 ## Verdict
 
 Your proposed approach is feasible, but the raw form is too flat for a lab platform.
@@ -63,7 +101,31 @@ That gives you:
 - reusable network profiles
 - cleaner mental model for learners
 
+### Why routers improve the model
+
+```mermaid
+flowchart TD
+  A["Application node sends traffic"] --> B{"Where are faults applied?"}
+  B -->|"Flat model"| C["Directly on each node interface"]
+  B -->|"Recommended model"| D["On router-to-router links"]
+  C --> E["Rules overlap across destinations"]
+  C --> F["Partial partitions become awkward"]
+  C --> G["Cleanup becomes scenario-specific"]
+  D --> H["Pairwise directional control"]
+  D --> I["Reusable link profiles"]
+  D --> J["Cleaner reset to baseline"]
+```
+
 ## Recommended Platform Layers
+
+```mermaid
+flowchart TD
+  T["1. Topology Layer<br/>regions, nodes, connectivity"] --> N["2. Network Control Layer<br/>tc, firewall, fault injection"]
+  N --> S["3. System Layer<br/>educational services / real systems"]
+  S --> W["4. Workload Layer<br/>reads, writes, retries, bursts"]
+  W --> O["5. Observability Layer<br/>metrics, logs, traces"]
+  O --> L["6. Lab Runtime Layer<br/>run scenario, collect results, reset"]
+```
 
 ### 1. Topology Layer
 
@@ -163,6 +225,18 @@ Responsibilities:
 
 This is where extensibility comes from.
 
+### End-to-end lab flow
+
+```mermaid
+flowchart LR
+  A["Start topology"] --> B["Apply baseline profile"]
+  B --> C["Start system + workload"]
+  C --> D["Inject fault or scenario step"]
+  D --> E["Capture metrics / logs / traces"]
+  E --> F["Evaluate assertions"]
+  F --> G["Reset network and lab state"]
+```
+
 ## Recommended Project Structure
 
 When you begin implementation, use a structure like this:
@@ -235,6 +309,20 @@ docs/
 ## Lab Contract
 
 Every lab should follow the same contract.
+
+```mermaid
+flowchart TD
+  L["lab.yml"] --> T["topology.yml"]
+  L --> W["workload.yml"]
+  L --> F["faults.yml"]
+  L --> A["assertions.yml"]
+  L --> N["notes.md"]
+  T --> R["Runtime builds environment"]
+  W --> R
+  F --> R
+  A --> R
+  R --> O["Artifacts, metrics, and pass/fail outcome"]
+```
 
 Example lab contents:
 
