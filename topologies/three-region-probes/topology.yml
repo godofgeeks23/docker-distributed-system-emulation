@@ -1,0 +1,65 @@
+id: three-region-probes
+name: Three Region Probes
+summary: Three regional LANs connected by WAN routers and a shared backbone.
+description: |
+  A foundational topology with one router and one probe in each region. All
+  cross-region traffic traverses the WAN backbone through the router layer.
+regions:
+  - id: us-east
+    label: us-east
+    subnet: 10.10.1.0/24
+    router:
+      id: router-us-east
+      label: router-us-east
+      service: router-us-east
+      ip: 10.10.1.254
+    nodes:
+      - id: probe-us-east
+        kind: probe
+        label: probe-us-east
+        service: probe-us-east
+        ip: 10.10.1.10
+  - id: eu-west
+    label: eu-west
+    subnet: 10.10.2.0/24
+    router:
+      id: router-eu-west
+      label: router-eu-west
+      service: router-eu-west
+      ip: 10.10.2.254
+    nodes:
+      - id: probe-eu-west
+        kind: probe
+        label: probe-eu-west
+        service: probe-eu-west
+        ip: 10.10.2.10
+  - id: ap-south
+    label: ap-south
+    subnet: 10.10.3.0/24
+    router:
+      id: router-ap-south
+      label: router-ap-south
+      service: router-ap-south
+      ip: 10.10.3.254
+    nodes:
+      - id: probe-ap-south
+        kind: probe
+        label: probe-ap-south
+        service: probe-ap-south
+        ip: 10.10.3.10
+backbone:
+  id: backbone
+  label: WAN Backbone
+links:
+  - id: wan:us-east:eu-west
+    kind: wan-link
+    source: router-us-east
+    target: router-eu-west
+  - id: wan:eu-west:ap-south
+    kind: wan-link
+    source: router-eu-west
+    target: router-ap-south
+  - id: wan:us-east:ap-south
+    kind: wan-link
+    source: router-us-east
+    target: router-ap-south

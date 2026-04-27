@@ -33,6 +33,7 @@ Requirements:
 - permission to run containers with `NET_ADMIN`
 - enough local privileges for the cAdvisor bind mounts
 - Go 1.25+
+- Node.js 24+ for building the web UI
 
 Build the controller:
 
@@ -70,6 +71,23 @@ Stop everything:
 ```bash
 ./bin/dslab down
 ```
+
+Build the web UI:
+
+```bash
+cd web
+npm install
+npm run build
+cd ..
+```
+
+Start the combined API and web UI server:
+
+```bash
+./bin/dslab serve --addr :8088
+```
+
+Open `http://localhost:8088`.
 
 Prometheus is exposed on `http://localhost:9090` and Grafana on `http://localhost:3000` with `admin/admin`.
 

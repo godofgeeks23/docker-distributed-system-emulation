@@ -1,8 +1,36 @@
+id: 00-network-basics/baseline-rtt
 name: baseline-rtt
+category: network-foundations
 type: ping-matrix
+summary: Measure baseline RTT across the three regions.
+description: |
+  Each probe pings the other regional probes to establish a baseline RTT matrix
+  before any additional impairments or system-level workloads are introduced.
+tags:
+  - latency
+  - network
+  - fundamentals
+topology: three-region-probes
+profiles:
+  suggested:
+    - profiles/latency/zero.yml
+    - profiles/latency/us-eu-ap.yml
 regions:
   - us-east
   - eu-west
   - ap-south
 count: 4
-
+ui:
+  focus:
+    nodes:
+      - probe-us-east
+      - probe-eu-west
+      - probe-ap-south
+    edges:
+      - wan:us-east:eu-west
+      - wan:eu-west:ap-south
+      - wan:us-east:ap-south
+  annotations:
+    - title: Regional RTT
+      body: Probe traffic traverses each region router and the WAN backbone.
+      target: backbone
